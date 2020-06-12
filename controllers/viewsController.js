@@ -50,7 +50,6 @@ exports.getAccount = (req, res) => {
 };
 
 exports.updateUserData = catchAsync(async (req, res) => {
-  console.log(req.body);
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {
@@ -72,7 +71,6 @@ exports.updateUserData = catchAsync(async (req, res) => {
 exports.getMyTours = catchAsync(async (req, res, next) => {
   // 1) Find all bookings
   const bookings = await Booking.find({ user: req.user.id });
-  console.log({ bookings });
   // 2) Find tours with the returned IDs
   const tourIds = bookings.map(el => el.tour);
   const tours = await Tour.find({ _id: { $in: tourIds } });

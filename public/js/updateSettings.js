@@ -4,9 +4,7 @@ import { showAlert } from './alerts';
 
 // type is either 'password' or 'data'
 export const updateSettings = async (data, type) => {
-  console.log('updateSettings');
-  console.log({ data, type });
-  const url = `http://localhost:8000/api/v1/users/${
+  const url = `/api/v1/users/${
     type === 'password' ? 'updateMyPassword' : 'updateMe'
   }`;
   try {
