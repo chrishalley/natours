@@ -60,7 +60,7 @@ const createBookingCheckout = async session => {
     const userId = user._id;
     const price = session.display_items[0].amount / 100;
     console.log({ tour, user, userId, price });
-    await Booking.create({ tour, userId, price });
+    await Booking.create({ tour, user: userId, price });
   } catch (e) {
     throw new AppError(400, 'something has gone wrong');
   }
