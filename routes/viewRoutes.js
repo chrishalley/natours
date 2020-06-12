@@ -9,7 +9,8 @@ const {
   getLogin,
   getAccount,
   updateUserData,
-  getMyTours
+  getMyTours,
+  alerts
 } = viewsController;
 
 const { isLoggedIn, protect } = authController;
@@ -17,6 +18,8 @@ const { isLoggedIn, protect } = authController;
 // const { createBookingCheckout } = bookingController;
 
 const router = express.Router();
+
+router.use(alerts);
 
 router.get('/', getOverview);
 router.get('/tour/:slug', isLoggedIn, getTour);
