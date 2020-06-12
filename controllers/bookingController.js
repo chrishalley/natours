@@ -4,6 +4,7 @@ const Booking = require('../models/bookingModel');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
+const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const { tourId } = req.params;
@@ -51,12 +52,15 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 // });
 
 const createBookingCheckout = async session => {
-  const { client_reference_id: tour, customer_email: email } = session;
-  const user = await User.findOne({ email }).id;
-  const price = session.display_items[0].amount / 100;
-  console.log({ tour, user, price });
-
-  await Booking.create({ tour, user, price });
+  try {
+    const { client_reference_id: tour, customer_email: email } = session;
+    const user = await User.findOne({ email }).id;
+    const price = session.display_items[0].amount / 100;
+    console.log({ tour, user, price });
+    await Booking.create({ tour, user, price });
+  } catch (e) {
+    throw new AppError(400, 'something has gone wrong');
+  }
 };
 
 exports.getAllBookings = factory.getAll(Booking);
