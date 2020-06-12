@@ -18,6 +18,10 @@ const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 
+const bookingController = require('./controllers/bookingController');
+
+const { webhookCheckout } = bookingController;
+
 const app = express();
 
 app.enable('trust proxy');
@@ -41,6 +45,13 @@ app.use(helmet());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Stripe webhooks
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout
+); // Body from Stripe is sent in a raw format, NOT json, so this middleware needs to be defined before the json middleware
 
 // Body Parser
 app.use(express.json({ limit: '10kb' }));
