@@ -53,12 +53,9 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 const createBookingCheckout = async session => {
   try {
-    console.log({ session });
     const { client_reference_id: tour, customer_email: email } = session;
-    console.log({ email });
     const user = (await User.findOne({ email }))._id;
     const price = session.display_items[0].amount / 100;
-    console.log({ tour, user, price });
     await Booking.create({ tour, user, price });
   } catch (e) {
     throw new AppError(400, 'something has gone wrong');
@@ -81,7 +78,6 @@ exports.webhookCheckout = (req, res, next) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
 
-    console.log({ event });
     if (event.type === 'checkout.session.completed') {
       createBookingCheckout(event.data.object);
     }
