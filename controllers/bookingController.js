@@ -21,11 +21,13 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: user.email,
     client_reference_id: tourId,
-    line_items: [
+    display_items: [
       {
         name: `${tour.name} Tour`,
         description: tour.summary,
-        images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+        images: [
+          `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`
+        ],
         amount: tour.price * 100,
         currency: 'usd',
         quantity: 1
